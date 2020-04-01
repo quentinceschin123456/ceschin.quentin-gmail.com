@@ -161,6 +161,41 @@ public class ServletDbManager extends HttpServlet {
                 System.out.println(e);
             }
     }
+    
+    public void createServiceTable(Connection con){
+        Statement ps = con.createStatement();
+        try {
+            String query = "CREATE TABLE USER( ";
+            query += "id INT PRIMARY KEY NOT NULL,";
+            query += "nom VARCHAR(100),";
+            query += "prenom VARCHAR(100),";
+            query += "email VARCHAR(255),";         
+            query += "mdp VARCHAR(255),";    
+            query += "privilege INT)";
+
+
+
+            ps.executeUpdate(query);    
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void updateServiceTable(Connection con){
+        
+    }
+    public void deleteServiceTable(Connection con){
+        
+    }
+    public void insertServiceTable(Connection con){
+        
+    }
+    public ResultSet selectAllService(Connection con){
+        ResultSet rs = null;
+        
+        return rs;
+    }
+    
+    
     public Connection createConnexion(){
         Context initCtx=null;
         try {
