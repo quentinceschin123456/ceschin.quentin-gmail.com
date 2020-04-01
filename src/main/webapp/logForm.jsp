@@ -1,9 +1,11 @@
+<%-- 
+    Document   : logForm
+    Created on : 1 avr. 2020, 21:29:04
+    Author     : Xenol
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>TODO supply a title</title>
@@ -20,5 +22,6 @@ and open the template in the editor.
             <br>
             <input id="submit" type="submit" name="SUBMIT">
         </form>
+        <div id="ERROR"><% out.println(request.getAttribute("ERROR")); %></div>
     </body>
 </html>

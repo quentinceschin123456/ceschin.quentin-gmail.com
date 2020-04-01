@@ -4,3 +4,4 @@ gradle.properties
 settings.gradle
 nb-configuration.xml
 pom.xml
+/target/
