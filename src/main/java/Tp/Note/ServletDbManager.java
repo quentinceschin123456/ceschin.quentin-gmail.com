@@ -8,6 +8,7 @@ package Tp.Note;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -94,9 +95,10 @@ public class ServletDbManager extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
- public void createTableUser(Connection con) throws SQLException{
-         Statement ps = con.createStatement();
+ public void createTableUser(Connection con){
+         
         try {
+            Statement ps = con.createStatement();
             String query = "CREATE TABLE USER( ";
             query += "id INT PRIMARY KEY NOT NULL,";
             query += "nom VARCHAR(100),";
@@ -111,9 +113,10 @@ public class ServletDbManager extends HttpServlet {
                 System.out.println(e);
             }
     }
-    public void dropTableUser(Connection con) throws SQLException{
-         Statement ps = con.createStatement();
+    public void dropTableUser(Connection con){
+        
         try {
+             Statement ps = con.createStatement();
             ps.executeUpdate("DROP TABLE USER");    
             } catch (Exception e) {
                 System.out.println(e);
@@ -123,15 +126,20 @@ public class ServletDbManager extends HttpServlet {
         dropTableUser(con);
         createTableUser(con);
         generateUser(con);
+        // create cate
+        // insert cate
+        
+        // create service
         
     }
     
-    public ResultSet selectListUser(Connection con) throws SQLException{
-        Statement ps = con.createStatement();
+    public ResultSet selectListUser(Connection con){
+      
         String query = "SELECT nom,prenom,email,privilege from USER";
         ResultSet rs = null;
         try {
-         rs = ps.executeQuery(query);    
+            Statement ps = con.createStatement();
+            rs = ps.executeQuery(query);    
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -140,23 +148,24 @@ public class ServletDbManager extends HttpServlet {
         }
     }
     
-    public void generateUser(Connection con) throws SQLException{
-         Statement ps = con.createStatement();
+    public void generateUser(Connection con) {
         String query = "INSERT INTO USER (nom,prenom,email,privilege) values ";
         query += "('Bonbeure','Jean','jean.bonbeure@test.mail,1'),";
         query += "('Colique','Al','al.colique@test.mail,1'),";
         query += "('Jean','Damien','damien.jean@test.mail,1')";
         try {
+         Statement ps = con.createStatement();
          ps.executeUpdate(query);    
             } catch (Exception e) {
                 System.out.println(e);
             }
     }
     
-    public void deleteUser(Connection con, String name) throws SQLException{
-         Statement ps = con.createStatement();
+    public void deleteUser(Connection con, String name) {
+         
          String query = "DELETE from USER where nom='"+name+"'";
         try {
+            Statement ps = con.createStatement();
          ps.executeUpdate(query);    
             } catch (Exception e) {
                 System.out.println(e);
@@ -164,13 +173,14 @@ public class ServletDbManager extends HttpServlet {
     }
     
     public void createServiceTable(Connection con){
-        Statement ps = con.createStatement();
+        
         try {
-            String query = "CREATE TABLE USER( ";
+            Statement ps = con.createStatement();
+            String query = "CREATE TABLE SERVICE( ";
             query += "id INT PRIMARY KEY NOT NULL,";
             query += "titre VARCHAR(100),";
             query += "uniteLoc VARCHAR(100),";
-            query += "coutUnitaire VARCHAR(255) )";
+            query += "coutUnitaire FLOAT )";
 
 
 
@@ -193,9 +203,40 @@ public class ServletDbManager extends HttpServlet {
         
         return rs;
     }
+     public void createCategoryTable(Connection con){
+        
+        try {
+            Statement ps = con.createStatement();
+            String query = "CREATE TABLE SERVICE( ";
+            query += "id INT PRIMARY KEY NOT NULL,";
+            query += "titre VARCHAR(100),";
+            query += "uniteLoc VARCHAR(100),";
+            query += "coutUnitaire FLOAT )";
+
+
+
+            ps.executeUpdate(query);    
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void updateCategoryTable(Connection con){
+        
+    }
+    public void deleteCategoryTable(Connection con){
+        
+    }
+    public void insertCategoryTable(Connection con){
+        
+    }
+    public ResultSet selectAllCategory(Connection con){
+        ResultSet rs = null;
+        
+        return rs;
+    }
     
     
-    public Connection createConnexion(){
+    public static Connection createConnexion(){
         Context initCtx=null;
         try {
             initCtx = new InitialContext();
@@ -218,5 +259,35 @@ public class ServletDbManager extends HttpServlet {
             Logger.getLogger(ServletDbManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con;
+    }
+    
+    public static boolean isUserReconized(String email,String pwd){
+        try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select id from user where email=? and mdp=?");
+            
+            ps.setString(1, email);
+            ps.setString(2, pwd);
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            try {
+                if (rs.getString("id")!=null){
+                    return true;
+                }else {
+                    return false;
+                }    
+            }catch (Exception e){
+                
+            }finally {
+                return  false;
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServletDbManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        return false;
+        
     }
 }
