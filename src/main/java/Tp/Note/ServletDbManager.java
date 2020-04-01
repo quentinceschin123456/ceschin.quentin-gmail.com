@@ -180,7 +180,10 @@ public class ServletDbManager extends HttpServlet {
             query += "id INT PRIMARY KEY NOT NULL,";
             query += "titre VARCHAR(100),";
             query += "uniteLoc VARCHAR(100),";
-            query += "coutUnitaire FLOAT )";
+            query += "coutUnitaire FLOAT,";
+            query += "UserId INT FOREIGN KEY REFERENCES User(id),";
+            query += "CategoryId INT FOREIGN KEY REFERENCES Category(id),";
+            query+=")";
 
 
 
@@ -207,11 +210,10 @@ public class ServletDbManager extends HttpServlet {
         
         try {
             Statement ps = con.createStatement();
-            String query = "CREATE TABLE SERVICE( ";
+            String query = "CREATE TABLE CATEGORY( ";
             query += "id INT PRIMARY KEY NOT NULL,";
-            query += "titre VARCHAR(100),";
-            query += "uniteLoc VARCHAR(100),";
-            query += "coutUnitaire FLOAT )";
+            query += "nom VARCHAR(100),";
+            query += "resume VARCHAR(255))";
 
 
 
@@ -227,7 +229,16 @@ public class ServletDbManager extends HttpServlet {
         
     }
     public void insertCategoryTable(Connection con){
-        
+        String query = "INSERT INTO Category (nom,resume) values ";
+        query += "('Cours','Enseigment de connaissance en informatique',),";
+        query += "('Jardinage','Culture du jardin'),";
+        query += "('Bricolage','Petit travaux')";
+        try {
+         Statement ps = con.createStatement();
+         ps.executeUpdate(query);    
+            } catch (Exception e) {
+                System.out.println(e);
+            }
     }
     public ResultSet selectAllCategory(Connection con){
         ResultSet rs = null;
@@ -261,6 +272,7 @@ public class ServletDbManager extends HttpServlet {
         return con;
     }
     
+    //TODO Ajouter les connexion close
     public static boolean isUserReconized(String email,String pwd){
         try {
             PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select id from user where email=? and mdp=?");
