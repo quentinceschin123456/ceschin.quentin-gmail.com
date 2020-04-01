@@ -101,7 +101,8 @@ public class ServletDbManager extends HttpServlet {
             query += "id INT PRIMARY KEY NOT NULL,";
             query += "nom VARCHAR(100),";
             query += "prenom VARCHAR(100),";
-            query += "email VARCHAR(255),";         
+            query += "email VARCHAR(255),";          
+            query += "mdp VARCHAR(255),";         
             query += "privilege INT)";
 
 
@@ -167,11 +168,9 @@ public class ServletDbManager extends HttpServlet {
         try {
             String query = "CREATE TABLE USER( ";
             query += "id INT PRIMARY KEY NOT NULL,";
-            query += "nom VARCHAR(100),";
-            query += "prenom VARCHAR(100),";
-            query += "email VARCHAR(255),";         
-            query += "mdp VARCHAR(255),";    
-            query += "privilege INT)";
+            query += "titre VARCHAR(100),";
+            query += "uniteLoc VARCHAR(100),";
+            query += "coutUnitaire VARCHAR(255) )";
 
 
 
