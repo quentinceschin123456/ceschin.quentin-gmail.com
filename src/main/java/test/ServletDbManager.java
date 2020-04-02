@@ -46,20 +46,22 @@ public class ServletDbManager extends HttpServlet {
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
            Connection con = createConnexion();
-           
+            /*dropTableUser(con);
+            deleteCategoryTable(con);
+            deleteServiceTable(con);*/
            // on doit test pour l'insert
            if (! isUserTableExist(con)){
                 createTableUser(con);
                 generateUser(con);
            
-           }
+           } 
            // on doit test pour l'insert
             if (!isCategoryTableExist(con)){
                 createCategoryTable(con);
                 insertCategoryTable(con);
             }
             // ne fait rien si existe déjà
-            createServiceTable(con);
+            createServiceTable(con); 
         }
     }
 
@@ -116,7 +118,7 @@ public class ServletDbManager extends HttpServlet {
 
             ps.executeUpdate(query);    
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("create user error");
             }
     }
     public void dropTableUser(Connection con){
@@ -147,7 +149,7 @@ public class ServletDbManager extends HttpServlet {
             Statement ps = con.createStatement();
             rs = ps.executeQuery(query);    
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("select user error");
             }
         finally{
             return rs;
@@ -163,7 +165,7 @@ public class ServletDbManager extends HttpServlet {
          Statement ps = con.createStatement();
          ps.executeUpdate(query);    
             } catch (Exception e) {
-                System.out.println(e);
+                 System.out.println("erreur insert");
             }
     }
     
@@ -174,7 +176,7 @@ public class ServletDbManager extends HttpServlet {
             Statement ps = con.createStatement();
          ps.executeUpdate(query);    
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("delete user");
             }
     }
     
@@ -195,14 +197,20 @@ public class ServletDbManager extends HttpServlet {
 
             ps.executeUpdate(query);    
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("error insert cat");
         }
     }
     public void updateServiceTable(Connection con){
         
     }
     public void deleteServiceTable(Connection con){
-        
+                 String query = "DROP table SERVICES";
+        try {
+            Statement ps = con.createStatement();
+         ps.executeUpdate(query);    
+            } catch (Exception e) {
+                System.out.println("delete user");
+            }
     }
     public void insertServiceTable(Connection con){
         
@@ -225,14 +233,20 @@ public class ServletDbManager extends HttpServlet {
 
             ps.executeUpdate(query);    
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("create cat errror");
         }
     }
     public void updateCategoryTable(Connection con){
         
     }
     public void deleteCategoryTable(Connection con){
-        
+                 String query = "drop table CATEGORY";
+        try {
+            Statement ps = con.createStatement();
+         ps.executeUpdate(query);    
+            } catch (Exception e) {
+                System.out.println("delete user");
+            }
     }
     public void insertCategoryTable(Connection con){
         String query = "INSERT INTO Category (nom,resume) values ";
@@ -243,7 +257,7 @@ public class ServletDbManager extends HttpServlet {
          Statement ps = con.createStatement();
          ps.executeUpdate(query);    
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("erreur insert");
             }
     }
     public ResultSet selectAllCategory(Connection con){
@@ -317,12 +331,12 @@ public class ServletDbManager extends HttpServlet {
         try {
             Statement ps = con.createStatement();
             rs = ps.executeQuery(query); 
-            
+            rs.next();
             if (rs != null){
                 return  Integer.parseInt(rs.getString("Count(id)"))> 0 ;
             }
         } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("error count");
                 return false;
             }
        
@@ -332,6 +346,49 @@ public class ServletDbManager extends HttpServlet {
     }
 
     public boolean isCategoryTableExist(Connection con) {
+        
+         String query = "SELECT Count(id) from Category";
+        ResultSet rs = null;
+        try {
+            Statement ps = con.createStatement();
+            rs = ps.executeQuery(query); 
+            rs.next();
+            if (rs != null){
+                return  Integer.parseInt(rs.getString("Count(id)"))> 0 ;
+            }
+        } catch (Exception e) {
+                System.out.println("error count");
+                return false;
+            }
         return false;
+    }
+    
+    //selection user return string prenom,nom,prestige,
+    public static String getUserInfo(String email,String password){
+        try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select id from user where email=? and mdp=?");
+            
+            ps.setString(1, email);
+            ps.setString(2, password);
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            try {
+                if (rs.getString("id")!=null){
+                    return rs.getString("prenom")+";"+rs.getString("nom")+";"+rs.getString("prvilege")+";";
+                }else {
+                    return "";
+                }    
+            }catch (Exception e){
+                
+            }finally {
+                return  "";
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServletDbManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
