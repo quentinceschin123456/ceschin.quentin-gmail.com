@@ -410,6 +410,5 @@ public class ServletDbManager extends HttpServlet {
                  System.out.println("erreur insert");
                  return false;
             }
-        return false;
     }
 }
