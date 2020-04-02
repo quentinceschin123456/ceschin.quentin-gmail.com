@@ -46,7 +46,7 @@ public class ServletDbManager extends HttpServlet {
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
            Connection con = createConnexion();
-            dropTableUser(con);
+           
            // on doit test pour l'insert
            if (! isUserTableExist(con)){
                 createTableUser(con);
@@ -156,9 +156,9 @@ public class ServletDbManager extends HttpServlet {
     
     public void generateUser(Connection con) {
         String query = "INSERT INTO USER values ";
-        query += "(null,'Bonbeure','Jean','jean.bonbeure@test.mail,'azerty',1'),";
-        query += "(null,'Colique','Al','al.colique@test.mail,'azerty',1'),";
-        query += "(null,'Jean','Damien','damien.jean@test.mail,'azerty',1')";
+        query += "(null,'Bonbeure','Jean','jean.bonbeure@test.mail','azerty',1),";
+        query += "(null,'Colique','Al','al.colique@test.mail','azerty',1),";
+        query += "(null,'Jean','Damien','damien.jean@test.mail','azerty',1)";
         try {
          Statement ps = con.createStatement();
          ps.executeUpdate(query);    
@@ -323,6 +323,7 @@ public class ServletDbManager extends HttpServlet {
             }
         } catch (Exception e) {
                 System.out.println(e);
+                return false;
             }
        
        
