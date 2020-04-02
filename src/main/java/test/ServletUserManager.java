@@ -45,10 +45,12 @@ public class ServletUserManager extends HttpServlet {
                 if(authentification(email, password)) {
                     HttpSession session = request.getSession();
                     session.setAttribute("identifiant", email);
-                    // String[] user = ServletDbManager.retrieveUser(email, password).split(";");
-                    // request.setAttribute("PRENOM", user[0]);
-                    // request.setAttribute("NOM", user[1]);
-                    // request.setAttribute("PRESTIGE", user[2]);
+                    String userInfos = ServletDbManager.getUserInfo(email, password);
+                    System.out.println("BITE " + userInfos);
+                    String[] user = userInfos.split(";");
+                    request.setAttribute("PRENOM", user[0]);
+                    request.setAttribute("NOM", user[1]);
+                    request.setAttribute("PRESTIGE", user[2]);
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);
                 } else {
                     error = "Authentification failed";
@@ -142,12 +144,11 @@ public class ServletUserManager extends HttpServlet {
         if(email.trim().isEmpty() || password.trim().isEmpty()) {
             return false;
         } else {
-            return false;
-            /*if(ServletDbManager.insertNewUser(email, password)) {
+            if(ServletDbManager.insertNewUser(newNom, newPrenom, email, password)) {
                 return true;
             } else {
                 return false;
-            } */         
+            }       
         }
     }
 }

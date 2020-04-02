@@ -60,7 +60,7 @@ public class ServletDbManager extends HttpServlet {
                 createCategoryTable(con);
                 insertCategoryTable(con);
             }
-            // ne fait rien si existe déjà
+            // ne fait rien si existe dï¿½jï¿½
             createServiceTable(con); 
         }
     }
@@ -367,7 +367,7 @@ public class ServletDbManager extends HttpServlet {
     //selection user return string prenom,nom,prestige,
     public static String getUserInfo(String email,String password){
         try {
-            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select id from user where email=? and mdp=?");
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select * from user where email=? and mdp=?");
             
             ps.setString(1, email);
             ps.setString(2, password);
@@ -375,8 +375,12 @@ public class ServletDbManager extends HttpServlet {
             ResultSet rs = ps.executeQuery();
             rs.next();
             try {
+                System.out.println("QQQQQQQQQQQQQQQQQQQQQ" + rs.getString("id"));
                 if (rs.getString("id")!=null){
-                    return rs.getString("prenom")+";"+rs.getString("nom")+";"+rs.getString("prvilege")+";";
+                    System.out.println("MERDE");
+                    System.out.println(rs.getString("prenom"));
+                    String retour = rs.getString("prenom")+";"+rs.getString("nom")+";"+rs.getString("privilege");
+                    return retour;
                 }else {
                     return "";
                 }    

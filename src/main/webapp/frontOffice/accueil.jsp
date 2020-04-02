@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Bienvenue <% out.print(request.getAttribute("PRENOM") + " " + request.getAttribute("NOM"));             %></h1>
+        <p>Vous avez un prestige de rang <% out.print(request.getAttribute("PRESTIGE"));             %></p>
     </body>
 </html>
