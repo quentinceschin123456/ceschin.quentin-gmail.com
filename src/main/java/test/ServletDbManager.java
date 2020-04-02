@@ -215,14 +215,15 @@ public class ServletDbManager extends HttpServlet {
     public void insertServiceTable(Connection con){
         
     }
-    public ResultSet selectAllService(Connection con){
-        String query = "SELECT * from Category";
+    public static ResultSet selectAllService(){
+        Connection con = ServletDbManager.createConnexion();
+        String query = "SELECT * from Service";
         ResultSet rs = null;
         try {
             Statement ps = con.createStatement();
             rs = ps.executeQuery(query);    
             } catch (Exception e) {
-                System.out.println("select cat list error");
+                System.out.println("select service list error");
             }
         finally{
             return rs;
@@ -268,10 +269,19 @@ public class ServletDbManager extends HttpServlet {
                 System.out.println("erreur insert");
             }
     }
-    public ResultSet selectAllCategory(Connection con){
+    public static ResultSet selectAllCategory(){
+         Connection con = ServletDbManager.createConnexion();
+        String query = "SELECT * from Category";
         ResultSet rs = null;
-        
-        return rs;
+        try {
+            Statement ps = con.createStatement();
+            rs = ps.executeQuery(query);    
+            } catch (Exception e) {
+                System.out.println("select cat list error");
+            }
+        finally{
+            return rs;
+        }
     }
     
     
