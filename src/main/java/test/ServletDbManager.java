@@ -28,7 +28,7 @@ import javax.sql.DataSource;
  *
  * @author AdminEtu
  */
-@WebServlet(name = "ServletDbManager", urlPatterns = {"/dbmanager"})
+@WebServlet(name = "ServletDbManager", urlPatterns = {"/dbmanager"},asyncSupported = true,loadOnStartup = 1)
 public class ServletDbManager extends HttpServlet {
 
     /**
@@ -216,9 +216,17 @@ public class ServletDbManager extends HttpServlet {
         
     }
     public ResultSet selectAllService(Connection con){
+        String query = "SELECT * from Category";
         ResultSet rs = null;
-        
-        return rs;
+        try {
+            Statement ps = con.createStatement();
+            rs = ps.executeQuery(query);    
+            } catch (Exception e) {
+                System.out.println("select cat list error");
+            }
+        finally{
+            return rs;
+        }
     }
      public void createCategoryTable(Connection con){
         

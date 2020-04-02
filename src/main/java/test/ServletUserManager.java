@@ -139,7 +139,7 @@ public class ServletUserManager extends HttpServlet {
         }
     }    
     
-    public boolean creationUser(String newPrenom, String newNom, String email, String password) {
+    public static boolean creationUser(String newPrenom, String newNom, String email, String password) {
         
         if(email.trim().isEmpty() || password.trim().isEmpty()) {
             return false;
@@ -150,5 +150,9 @@ public class ServletUserManager extends HttpServlet {
                 return false;
             }       
         }
+    }
+    
+    public static boolean createService(){
+        return false;
     }
 }
