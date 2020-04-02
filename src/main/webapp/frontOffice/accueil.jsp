@@ -14,5 +14,7 @@
     <body>
         <h1>Bienvenue <% out.print(request.getAttribute("PRENOM") + " " + request.getAttribute("NOM"));             %></h1>
         <p>Vous avez un prestige de rang <% out.print(request.getAttribute("PRESTIGE"));             %></p>
+        <br>
+        <a href="creation_service.jsp">Gestionnaire des Services</a>
     </body>
 </html>
