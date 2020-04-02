@@ -217,11 +217,11 @@ public class ServletDbManager extends HttpServlet {
         }
     }
     
-    public static boolean selectServiceByCategory(int idCat){
+    public static boolean selectServiceByCategory(String idCat){
          try {
             PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select * from service where CategoryId=?");
             
-            ps.setInt(1, idCat);
+            ps.setInt(1, Integer.parseInt(idCat));
                         
              
          ps.executeQuery();  
@@ -247,7 +247,7 @@ public class ServletDbManager extends HttpServlet {
             }
     }
     
-    public static boolean insertService(String titre, String resume,String uniteLoc, String coutUnitaire,String email,int idCat ){
+    public static boolean insertService(String titre, String resume,String uniteLoc, String coutUnitaire,String email,String idCat ){
         // retrive from email
         
             try {
@@ -262,7 +262,7 @@ public class ServletDbManager extends HttpServlet {
             ps.setString(3, uniteLoc);
             ps.setString(4,coutUnitaire);
             ps.setString(5,idUser);
-            ps.setInt(6,idCat);
+            ps.setInt(6,Integer.parseInt(idCat));
                         
              
          ps.executeUpdate();  
