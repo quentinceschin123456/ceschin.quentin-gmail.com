@@ -16,7 +16,7 @@
         <h1>Bienvenue <% out.print(request.getAttribute("PRENOM") + " " + request.getAttribute("NOM"));             %></h1>
         <p>Vous avez un prestige de rang <% out.print(request.getAttribute("PRESTIGE"));             %></p>
         <br>
-        <table border='4'>
+        <table border='4>'
             <tr><th>Nom</th>
             <% 
             if(request.getAttribute("resultSelect") != null) {
@@ -24,7 +24,13 @@
                 while (rs.next()){
              %>
                 <tr>
-                    <td><%out.println(rs.getString("NOM"));%></td>
+                    <td><%out.println(rs.getString("titre"));%></td>
+                     <td><%out.println(rs.getString("resume"));%></td>
+                      <td><%out.println(rs.getString("uniteLoc"));%></td>
+                       <td><%out.println(rs.getString("coutUnitaire"));%></td>
+                        <td><%out.println(rs.getString("UserId"));%></td> <td>
+                            <%out.println(rs.getString("CategoryId"));%></td>
+                        
                 </tr>
             <% }} %>
             </table>

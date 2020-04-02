@@ -7,6 +7,7 @@ package test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -54,7 +55,10 @@ public class ServletUserManager extends HttpServlet {
                     request.setAttribute("PRENOM", user[0]);
                     request.setAttribute("NOM", user[1]);
                     request.setAttribute("PRESTIGE", user[2]);
-                    request.setAttribute("resultSelect", ServletDbManager.selectServiceByUser(email));
+                    ResultSet rs = ServletDbManager.selectServiceByUser(email);
+                    // System.out.println("test.ServletUserManager.processRequest() " + rs.next() + " "+rs.get );
+                    request.setAttribute("resultSelect", rs);
+                    System.out.println("test.ServletUserManager.processRequest()");
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);
                 } else {
                     error = "Authentification failed";

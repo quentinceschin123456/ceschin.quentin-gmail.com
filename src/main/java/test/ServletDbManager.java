@@ -224,15 +224,16 @@ public class ServletDbManager extends HttpServlet {
     
     public static ResultSet selectServiceByUser(String email){
         try {
-            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select s.id,s.titre,s.resume,s.uniteLoc,s.coutUnitaire,s.UserId,s.CategoryId from service s,user u  where u.id = s.UserId and u.email=?");
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select s.id as id,s.titre as titre,s.resume as resume,s.uniteLoc as uniteLoc,s.coutUnitaire as coutUnitaire ,s.UserId as UserId,s.CategoryId as CategoryId from service s,user u  where u.id = s.UserId and u.email=?");
             
             ps.setString(1, email);
                         
              
-         ResultSet rs = ps.executeQuery();  
+         ResultSet rs = ps.executeQuery();
+            //System.out.println("test.ServletDbManager.selectServiceByUser()" + rs.next() + rs.getString("id"));
          return rs;
             } catch (Exception e) {
-                 System.out.println("erreur selectServiceByUser");
+                 System.out.println("erreur selectServiceByUser ");
             }
         return null;
     }

@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Authentification</h1>
-        <form action="frontOffice/ServletUserManager" method="POST">
+        <form action="/Tp-Note/frontOffice/ServletUserManager" method="POST">
             <label id="labelEmail" for="EMAIL">Email</label>
             <input id="EMAIL" type="email" name="EMAIL">
             <label id="labelPassword" for="PASSWORD">Password</label>
