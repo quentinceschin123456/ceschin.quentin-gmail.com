@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tp.Note;
+package test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,7 +28,7 @@ import javax.sql.DataSource;
  *
  * @author AdminEtu
  */
-@WebServlet(name = "ServletDbManager", urlPatterns = {"/ServletDbManager"})
+@WebServlet(name = "ServletDbManager", urlPatterns = {"/dbmanager"})
 public class ServletDbManager extends HttpServlet {
 
     /**
@@ -45,15 +45,21 @@ public class ServletDbManager extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletDbManager</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServletDbManager at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+           Connection con = createConnexion();
+            dropTableUser(con);
+           // on doit test pour l'insert
+           if (! isUserTableExist(con)){
+                createTableUser(con);
+                generateUser(con);
+           
+           }
+           // on doit test pour l'insert
+            if (!isCategoryTableExist(con)){
+                createCategoryTable(con);
+                insertCategoryTable(con);
+            }
+            // ne fait rien si existe déjà
+            createServiceTable(con);
         }
     }
 
@@ -100,7 +106,7 @@ public class ServletDbManager extends HttpServlet {
         try {
             Statement ps = con.createStatement();
             String query = "CREATE TABLE USER( ";
-            query += "id INT PRIMARY KEY NOT NULL,";
+            query += "id INT GENERATED ALWAYS as IDENTITY  PRIMARY KEY,";
             query += "nom VARCHAR(100),";
             query += "prenom VARCHAR(100),";
             query += "email VARCHAR(255),";          
@@ -135,7 +141,7 @@ public class ServletDbManager extends HttpServlet {
     
     public ResultSet selectListUser(Connection con){
       
-        String query = "SELECT nom,prenom,email,privilege from USER";
+        String query = "SELECT nom,prenom,email,mdp,privilege from USER";
         ResultSet rs = null;
         try {
             Statement ps = con.createStatement();
@@ -149,10 +155,10 @@ public class ServletDbManager extends HttpServlet {
     }
     
     public void generateUser(Connection con) {
-        String query = "INSERT INTO USER (nom,prenom,email,privilege) values ";
-        query += "('Bonbeure','Jean','jean.bonbeure@test.mail,1'),";
-        query += "('Colique','Al','al.colique@test.mail,1'),";
-        query += "('Jean','Damien','damien.jean@test.mail,1')";
+        String query = "INSERT INTO USER values ";
+        query += "(null,'Bonbeure','Jean','jean.bonbeure@test.mail,'azerty',1'),";
+        query += "(null,'Colique','Al','al.colique@test.mail,'azerty',1'),";
+        query += "(null,'Jean','Damien','damien.jean@test.mail,'azerty',1')";
         try {
          Statement ps = con.createStatement();
          ps.executeUpdate(query);    
@@ -177,7 +183,7 @@ public class ServletDbManager extends HttpServlet {
         try {
             Statement ps = con.createStatement();
             String query = "CREATE TABLE SERVICE( ";
-            query += "id INT PRIMARY KEY NOT NULL,";
+            query += "id INT  GENERATED ALWAYS as IDENTITY  PRIMARY KEY,";
             query += "titre VARCHAR(100),";
             query += "uniteLoc VARCHAR(100),";
             query += "coutUnitaire FLOAT,";
@@ -211,7 +217,7 @@ public class ServletDbManager extends HttpServlet {
         try {
             Statement ps = con.createStatement();
             String query = "CREATE TABLE CATEGORY( ";
-            query += "id INT PRIMARY KEY NOT NULL,";
+            query += "id INT GENERATED ALWAYS as IDENTITY  PRIMARY KEY,";
             query += "nom VARCHAR(100),";
             query += "resume VARCHAR(255))";
 
@@ -301,5 +307,30 @@ public class ServletDbManager extends HttpServlet {
        
         return false;
         
+    }
+
+    public boolean isUserTableExist(Connection con) {
+        
+
+        String query = "SELECT Count(id) from USER";
+        ResultSet rs = null;
+        try {
+            Statement ps = con.createStatement();
+            rs = ps.executeQuery(query); 
+            
+            if (rs != null){
+                return  Integer.parseInt(rs.getString("Count(id)"))> 0 ;
+            }
+        } catch (Exception e) {
+                System.out.println(e);
+            }
+       
+       
+        
+       return false;
+    }
+
+    public boolean isCategoryTableExist(Connection con) {
+        return false;
     }
 }

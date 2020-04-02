@@ -5,3 +5,4 @@ settings.gradle
 nb-configuration.xml
 pom.xml
 /target/
+/build/
