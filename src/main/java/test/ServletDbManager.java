@@ -391,16 +391,15 @@ public class ServletDbManager extends HttpServlet {
         return "";
     }
     
-    public static boolean insertNewUser(String nom,String prenom,String email,String mdp,String privilege){
+    public static boolean insertNewUser(String nom,String prenom,String email,String mdp){
          try {
-            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("NSERT INTO USER values (null,?,?,?,?,?)");
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("NSERT INTO USER values (null,?,?,?,?,0)");
             
             ps.setString(1, nom);
             ps.setString(2, prenom);
             ps.setString(3, email);
             ps.setString(4, mdp);
-            ps.setString(5, privilege);
-             
+                        
              
          ps.executeUpdate();  
          return true;
