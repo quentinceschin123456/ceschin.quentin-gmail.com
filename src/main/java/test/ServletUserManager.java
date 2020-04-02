@@ -41,6 +41,9 @@ public class ServletUserManager extends HttpServlet {
             String password = request.getParameter("PASSWORD");
             String error = "";
             
+            HttpSession mysession = request.getSession();
+            if(mysession.getAttribute("identifiant")== null){
+               
             if(email != null && password != null) {                             
                 if(authentification(email, password)) {
                     HttpSession session = request.getSession();
@@ -51,6 +54,7 @@ public class ServletUserManager extends HttpServlet {
                     request.setAttribute("PRENOM", user[0]);
                     request.setAttribute("NOM", user[1]);
                     request.setAttribute("PRESTIGE", user[2]);
+                    request.setAttribute("resultSelect", ServletDbManager.selectServiceByUser(email));
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);
                 } else {
                     error = "Authentification failed";
@@ -82,6 +86,16 @@ public class ServletUserManager extends HttpServlet {
                     request.setAttribute("ERROR", error);
                     getServletContext().getRequestDispatcher("/frontOffice/creationCompte.jsp").forward(request, response); 
                 }
+            }
+            }else {
+                    
+                    String userInfos = ServletDbManager.getUserInfo(email);
+                    String[] user = userInfos.split(";");
+                    request.setAttribute("PRENOM", user[0]);
+                    request.setAttribute("NOM", user[1]);
+                    request.setAttribute("PRESTIGE", user[2]);
+                    request.setAttribute("resultSelect", ServletDbManager.selectServiceByUser(email));
+                    getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);
             }
 
         }

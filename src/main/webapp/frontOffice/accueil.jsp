@@ -4,6 +4,7 @@
     Author     : Xenol
 --%>
 
+<%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,22 @@
         <h1>Bienvenue <% out.print(request.getAttribute("PRENOM") + " " + request.getAttribute("NOM"));             %></h1>
         <p>Vous avez un prestige de rang <% out.print(request.getAttribute("PRESTIGE"));             %></p>
         <br>
-        <a href="./ServletServiceManager">Gestionnaire des Services</a>
+        <table border='4'>
+            <tr><th>Nom</th>
+            <% 
+            if(request.getAttribute("resultSelect") != null) {
+                ResultSet rs = (ResultSet) request.getAttribute("resultSelect");
+                while (rs.next()){
+             %>
+                <tr>
+                    <td><%out.println(rs.getString("NOM"));%></td>
+                </tr>
+            <% }} %>
+            </table>
+        
+        
+        <br>
+        <a href="ServletServiceManager">Gestionnaire des Services</a>
+        
     </body>
 </html>

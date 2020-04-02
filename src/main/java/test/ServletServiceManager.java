@@ -7,6 +7,7 @@ package test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,7 +45,7 @@ public class ServletServiceManager extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("identifiant");
             String error = "";
-            
+            System.out.println(titre);
             if(titre != null && resume != null && categorieID != null && timeunit != null && cost != null) {
                 if (ServletDbManager.insertService(titre, resume, timeunit, cost, email, categorieID )) {
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);

@@ -28,7 +28,7 @@ import javax.sql.DataSource;
  *
  * @author AdminEtu
  */
-@WebServlet(name = "ServletDbManager", urlPatterns = {"/dbmanager"},asyncSupported = true,loadOnStartup = 1)
+@WebServlet(name = "ServletDbManager", urlPatterns = {"/frontOffice/dbmanager"},asyncSupported = true,loadOnStartup = 1)
 public class ServletDbManager extends HttpServlet {
 
     /**
@@ -62,6 +62,11 @@ public class ServletDbManager extends HttpServlet {
             }
             // ne fait rien si existe d�j�
             createServiceTable(con);
+                    
+            
+            getServletContext().getRequestDispatcher("/frontOffice/logForm.jsp").forward(request, response);  
+            
+            
         }
     }
 
@@ -205,27 +210,38 @@ public class ServletDbManager extends HttpServlet {
             query += "resume VARCHAR(255),";
             query += "uniteLoc VARCHAR(100),";
             query += "coutUnitaire FLOAT,";
-            query += "UserId INT FOREIGN KEY REFERENCES User(id),";
-            query += "CategoryId INT FOREIGN KEY REFERENCES Category(id),";
+            query += "UserId INT REFERENCES User(id),";
+            query += "CategoryId INT REFERENCES Category(id)";
             query+=")";
-
 
 
             ps.executeUpdate(query);    
         } catch (Exception e) {
-            System.out.println("error insert cat");
+            System.out.println("error createServiceTable");
+            System.out.println(e);
         }
     }
     
-    public static boolean selectServiceByUser(){
-        return false;
+    public static ResultSet selectServiceByUser(String email){
+        try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select s.id,s.titre,s.resume,s.uniteLoc,s.coutUnitaire,s.UserId,s.CategoryId from service s,user u  where u.id = s.UserId and u.email=?");
+            
+            ps.setString(1, email);
+                        
+             
+         ResultSet rs = ps.executeQuery();  
+         return rs;
+            } catch (Exception e) {
+                 System.out.println("erreur selectServiceByUser");
+            }
+        return null;
     }
     
     public static ResultSet selectServiceByCategory(String idCat){
          try {
             PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select * from service where CategoryId=?");
             
-            ps.setInt(1, Integer.parseInt(idCat));
+            ps.setInt(1, Integer.parseInt(idCat.trim()));
                         
              
          ResultSet rs = ps.executeQuery();  
@@ -253,7 +269,6 @@ public class ServletDbManager extends HttpServlet {
     
     public static boolean insertService(String titre, String resume,String uniteLoc, String coutUnitaire,String email,String idCat ){
         // retrive from email
-        
             try {
              Connection con = ServletDbManager.createConnexion();   
             ResultSet res = selectUserByEmail(email,con);
@@ -266,7 +281,7 @@ public class ServletDbManager extends HttpServlet {
             ps.setString(3, uniteLoc);
             ps.setString(4,coutUnitaire);
             ps.setString(5,idUser);
-            ps.setInt(6,Integer.parseInt(idCat));
+            ps.setInt(6,Integer.parseInt(idCat.trim()));
                         
              
          ps.executeUpdate();  
@@ -495,6 +510,32 @@ public class ServletDbManager extends HttpServlet {
         return "";
     }
     
+     //selection user return string prenom,nom,prestige,
+    public static String getUserInfo(String email){
+        try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("Select * from user where email=?");
+            
+            ps.setString(1, email);
+            
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            try {
+                if (rs.getString("id")!=null){
+                    String retour = rs.getString("prenom")+";"+rs.getString("nom")+";"+rs.getString("privilege");
+                    return retour;
+                }else {
+                    return "";
+                }    
+            }catch (Exception e){
+                return  "";
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServletDbManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
     public static boolean insertNewUser(String nom,String prenom,String email,String mdp){
          try {
             PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("INSERT INTO USER values (null,?,?,?,?,0)");

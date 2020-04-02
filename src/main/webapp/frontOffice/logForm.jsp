@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Authentification</h1>
-        <form action="ServletUserManager" method="POST">
+        <form action="frontOffice/ServletUserManager" method="POST">
             <label id="labelEmail" for="EMAIL">Email</label>
             <input id="EMAIL" type="email" name="EMAIL">
             <label id="labelPassword" for="PASSWORD">Password</label>
@@ -22,7 +22,7 @@
             <br>
             <input id="submit" type="submit" name="SUBMIT">
         </form>
-        <a href="./creationCompte.jsp">Créer un compte</a>
+        <a href="./frontOffice/creationCompte.jsp">Créer un compte</a>
         <div id="ERROR"><% if(request.getAttribute("ERROR") != null) out.println(request.getAttribute("ERROR")); %></div>
     </body>
 </html>
