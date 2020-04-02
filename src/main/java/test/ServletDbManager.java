@@ -217,6 +217,36 @@ public class ServletDbManager extends HttpServlet {
         }
     }
     
+    public static boolean selectServiceByCategory(int idCat){
+         try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select * from service where CategoryId=?");
+            
+            ps.setInt(1, idCat);
+                        
+             
+         ps.executeQuery();  
+         return true;
+            } catch (Exception e) {
+                 System.out.println("erreur SEELECT  service by cat");
+                 return false;
+            }
+    }
+    
+    public static boolean selectServiceByTitre(String titre){
+         try {
+            PreparedStatement ps = ServletDbManager.createConnexion().prepareStatement("select * from service where titre=?");
+            
+            ps.setString(1, titre);
+                        
+             
+         ps.executeQuery();  
+         return true;
+            } catch (Exception e) {
+                 System.out.println("erreur selectServiceByTitre");
+                 return false;
+            }
+    }
+    
     public static boolean insertService(String titre, String resume,String uniteLoc, String coutUnitaire,String email,int idCat ){
         // retrive from email
         
@@ -225,7 +255,7 @@ public class ServletDbManager extends HttpServlet {
             ResultSet res = selectUserByEmail(email,con);
             res.next();
             String idUser =res.getString("id");
-            PreparedStatement ps = con.prepareStatement("INSERT INTO SERVICE values (null,?,?,?,?,0)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO SERVICE values (null,?,?,?,?,?,?)");
             
             ps.setString(1, titre);
             ps.setString(2, resume);
