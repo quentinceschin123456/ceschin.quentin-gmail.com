@@ -36,7 +36,6 @@ public class ServletUserManager extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             
-            System.out.print(request.getRequestURI());
             
             String email = request.getParameter("EMAIL");
             String password = request.getParameter("PASSWORD");
@@ -50,15 +49,12 @@ public class ServletUserManager extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("identifiant", email);
                     String userInfos = ServletDbManager.getUserInfo(email, password);
-                    System.out.println("BITE " + userInfos);
                     String[] user = userInfos.split(";");
                     request.setAttribute("PRENOM", user[0]);
                     request.setAttribute("NOM", user[1]);
                     request.setAttribute("PRESTIGE", user[2]);
                     ResultSet rs = ServletDbManager.selectServiceByUser(email);
-                    // System.out.println("test.ServletUserManager.processRequest() " + rs.next() + " "+rs.get );
                     request.setAttribute("resultSelect", rs);
-                    System.out.println("test.ServletUserManager.processRequest()");
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);
                 } else {
                     error = "Authentification failed";

@@ -45,7 +45,7 @@ public class ServletServiceManager extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("identifiant");
             String error = "";
-            System.out.println(titre);
+            
             if(titre != null && resume != null && categorieID != null && timeunit != null && cost != null) {
                 if (ServletDbManager.insertService(titre, resume, timeunit, cost, email, categorieID )) {
                     getServletContext().getRequestDispatcher("/frontOffice/accueil.jsp").forward(request, response);

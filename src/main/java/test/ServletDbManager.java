@@ -491,10 +491,7 @@ public class ServletDbManager extends HttpServlet {
             ResultSet rs = ps.executeQuery();
             rs.next();
             try {
-                System.out.println("QQQQQQQQQQQQQQQQQQQQQ" + rs.getString("id"));
                 if (rs.getString("id")!=null){
-                    System.out.println("MERDE");
-                    System.out.println(rs.getString("prenom"));
                     String retour = rs.getString("prenom")+";"+rs.getString("nom")+";"+rs.getString("privilege");
                     return retour;
                 }else {
