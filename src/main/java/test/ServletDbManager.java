@@ -141,13 +141,28 @@ public class ServletDbManager extends HttpServlet {
         
     }
     
-    public ResultSet selectListUser(Connection con){
+    public static ResultSet selectListUser(Connection con){
       
         String query = "SELECT nom,prenom,email,mdp,privilege from USER";
         ResultSet rs = null;
         try {
             Statement ps = con.createStatement();
             rs = ps.executeQuery(query);    
+            } catch (Exception e) {
+                System.out.println("select user error");
+            }
+        finally{
+            return rs;
+        }
+    }
+    
+    public static ResultSet selectUserByEmail(String email, Connection con){
+         String query = "SELECT id from User where email=?";
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, email);
+            rs = ps.executeQuery();    
             } catch (Exception e) {
                 System.out.println("select user error");
             }
@@ -187,6 +202,7 @@ public class ServletDbManager extends HttpServlet {
             String query = "CREATE TABLE SERVICE( ";
             query += "id INT  GENERATED ALWAYS as IDENTITY  PRIMARY KEY,";
             query += "titre VARCHAR(100),";
+            query += "resume VARCHAR(255),";
             query += "uniteLoc VARCHAR(100),";
             query += "coutUnitaire FLOAT,";
             query += "UserId INT FOREIGN KEY REFERENCES User(id),";
@@ -200,6 +216,37 @@ public class ServletDbManager extends HttpServlet {
             System.out.println("error insert cat");
         }
     }
+    
+    public static boolean insertService(String titre, String resume,String uniteLoc, String coutUnitaire,String email,int idCat ){
+        // retrive from email
+        
+            try {
+             Connection con = ServletDbManager.createConnexion();   
+            ResultSet res = selectUserByEmail(email,con);
+            res.next();
+            String idUser =res.getString("id");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO SERVICE values (null,?,?,?,?,0)");
+            
+            ps.setString(1, titre);
+            ps.setString(2, resume);
+            ps.setString(3, uniteLoc);
+            ps.setString(4,coutUnitaire);
+            ps.setString(5,idUser);
+            ps.setInt(6,idCat);
+                        
+             
+         ps.executeUpdate();  
+         return true;
+            } catch (Exception e) {
+                 System.out.println("erreur insert");
+                 return false;
+            }
+        
+        
+    } 
+    
+    
+    
     public void updateServiceTable(Connection con){
         
     }
@@ -229,6 +276,7 @@ public class ServletDbManager extends HttpServlet {
             return rs;
         }
     }
+    
      public void createCategoryTable(Connection con){
         
         try {
@@ -249,7 +297,7 @@ public class ServletDbManager extends HttpServlet {
         
     }
     public void deleteCategoryTable(Connection con){
-                 String query = "drop table CATEGORY";
+        String query = "drop table CATEGORY";
         try {
             Statement ps = con.createStatement();
          ps.executeUpdate(query);    
