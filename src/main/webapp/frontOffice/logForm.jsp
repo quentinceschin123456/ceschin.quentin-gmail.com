@@ -14,7 +14,7 @@
     </head>
     <body>
         <h1>Authentification</h1>
-        <form action="auth" method="POST">
+        <form action="ServletUserManager" method="POST">
             <label id="labelEmail" for="EMAIL">Email</label>
             <input id="EMAIL" type="email" name="EMAIL">
             <label id="labelPassword" for="PASSWORD">Password</label>
@@ -22,6 +22,7 @@
             <br>
             <input id="submit" type="submit" name="SUBMIT">
         </form>
-        <div id="ERROR"><% out.println(request.getAttribute("ERROR")); %></div>
+        <a href="./creationCompte.jsp">Créer un compte</a>
+        <div id="ERROR"><% if(request.getAttribute("ERROR") != null) out.println(request.getAttribute("ERROR")); %></div>
     </body>
 </html>
