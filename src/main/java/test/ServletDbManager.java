@@ -381,8 +381,6 @@ public class ServletDbManager extends HttpServlet {
                     return "";
                 }    
             }catch (Exception e){
-                
-            }finally {
                 return  "";
             }
             
