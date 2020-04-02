@@ -61,7 +61,7 @@ public class ServletDbManager extends HttpServlet {
                 insertCategoryTable(con);
             }
             // ne fait rien si existe d�j�
-            createServiceTable(con); 
+            createServiceTable(con);
         }
     }
 
@@ -272,7 +272,7 @@ public class ServletDbManager extends HttpServlet {
          ps.executeUpdate();  
          return true;
             } catch (Exception e) {
-                 System.out.println("erreur insert");
+                 System.out.println(e);
                  return false;
             }
         
