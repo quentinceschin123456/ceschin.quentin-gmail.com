@@ -304,14 +304,15 @@ public class ServletDbManager extends HttpServlet {
             rs.next();
             try {
                 if (rs.getString("id")!=null){
+                    System.out.println("ici");
                     return true;
                 }else {
+                    System.out.println("ici");
+
                     return false;
                 }    
             }catch (Exception e){
-                
-            }finally {
-                return  false;
+                System.out.println("error");
             }
             
             
