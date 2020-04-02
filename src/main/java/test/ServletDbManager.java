@@ -389,6 +389,6 @@ public class ServletDbManager extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(ServletDbManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        return "";
     }
 }
